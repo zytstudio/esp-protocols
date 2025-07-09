@@ -48,7 +48,8 @@ typedef enum {
     WEBSOCKET_ERROR_TYPE_NONE = 0,
     WEBSOCKET_ERROR_TYPE_TCP_TRANSPORT,
     WEBSOCKET_ERROR_TYPE_PONG_TIMEOUT,
-    WEBSOCKET_ERROR_TYPE_HANDSHAKE
+    WEBSOCKET_ERROR_TYPE_HANDSHAKE,
+    WEBSOCKET_ERROR_TYPE_SERVER_CLOSE
 } esp_websocket_error_type_t;
 
 /**
@@ -101,6 +102,7 @@ typedef struct {
     const char                  *password;                  /*!< Using for Http authentication */
     const char                  *path;                      /*!< HTTP Path, if not set, default is `/` */
     bool                        disable_auto_reconnect;     /*!< Disable the automatic reconnect function when disconnected */
+    bool                        enable_close_reconnect;     /*!< Enable reconnect after server close */
     void                        *user_context;              /*!< HTTP user data context */
     int                         task_prio;                  /*!< Websocket task priority */
     const char                 *task_name;                  /*!< Websocket task name */
@@ -358,6 +360,26 @@ int esp_websocket_client_send_fin(esp_websocket_client_handle_t client, TickType
 int esp_websocket_client_send_with_opcode(esp_websocket_client_handle_t client, ws_transport_opcodes_t opcode, const uint8_t *data, int len, TickType_t timeout);
 
 /**
+ * @brief      Write opcode data to the WebSocket connection
+ *
+ * @param[in]  client  The client
+ * @param[in]  opcode  The opcode
+ * @param[in]  data    The data
+ * @param[in]  len     The length
+ * @param[in]  timeout Write data timeout in RTOS ticks
+ *
+ *  Notes:
+ *  - In order to send a zero payload, data and len should be set to NULL/0
+ *  - This API does NOT set the FIN bit on the last fragment of message
+ *
+ *
+ * @return
+ *     - Number of data was sent
+ *     - (-1) if any errors
+ */
+int esp_websocket_client_send_with_exact_opcode(esp_websocket_client_handle_t client, ws_transport_opcodes_t opcode, const uint8_t *data, int len, TickType_t timeout);
+
+/**
  * @brief      Close the WebSocket connection in a clean way
  *
  * Sequence of clean close initiated by client:
@@ -459,6 +481,18 @@ esp_err_t esp_websocket_register_events(esp_websocket_client_handle_t client,
                                         esp_websocket_event_id_t event,
                                         esp_event_handler_t event_handler,
                                         void *event_handler_arg);
+
+/**
+ * @brief Unegister the Websocket Events
+ *
+ * @param client            The client handle
+ * @param event             The event id
+ * @param event_handler     The callback function
+ * @return esp_err_t
+ */
+esp_err_t esp_websocket_unregister_events(esp_websocket_client_handle_t client,
+                                          esp_websocket_event_id_t event,
+                                          esp_event_handler_t event_handler);
 
 #ifdef __cplusplus
 }
