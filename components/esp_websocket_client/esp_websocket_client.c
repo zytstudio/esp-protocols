@@ -588,7 +588,7 @@ static esp_err_t esp_websocket_client_create_transport(esp_websocket_client_hand
     return ESP_OK;
 }
 
-static int esp_websocket_client_send_with_exact_opcode(esp_websocket_client_handle_t client, ws_transport_opcodes_t opcode, const uint8_t *data, int len, TickType_t timeout)
+int esp_websocket_client_send_with_exact_opcode(esp_websocket_client_handle_t client, ws_transport_opcodes_t opcode, const uint8_t *data, int len, TickType_t timeout)
 {
     int ret = -1;
     int need_write = len;

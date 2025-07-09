@@ -360,6 +360,26 @@ int esp_websocket_client_send_fin(esp_websocket_client_handle_t client, TickType
 int esp_websocket_client_send_with_opcode(esp_websocket_client_handle_t client, ws_transport_opcodes_t opcode, const uint8_t *data, int len, TickType_t timeout);
 
 /**
+ * @brief      Write opcode data to the WebSocket connection
+ *
+ * @param[in]  client  The client
+ * @param[in]  opcode  The opcode
+ * @param[in]  data    The data
+ * @param[in]  len     The length
+ * @param[in]  timeout Write data timeout in RTOS ticks
+ *
+ *  Notes:
+ *  - In order to send a zero payload, data and len should be set to NULL/0
+ *  - This API does NOT set the FIN bit on the last fragment of message
+ *
+ *
+ * @return
+ *     - Number of data was sent
+ *     - (-1) if any errors
+ */
+int esp_websocket_client_send_with_exact_opcode(esp_websocket_client_handle_t client, ws_transport_opcodes_t opcode, const uint8_t *data, int len, TickType_t timeout);
+
+/**
  * @brief      Close the WebSocket connection in a clean way
  *
  * Sequence of clean close initiated by client:
