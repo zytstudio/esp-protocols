@@ -1,11 +1,3 @@
-# NOT official version.
-
-## Difference to official version
-
-### `esp_websocket_client`
-
-- Exposes `esp_websocket_client_send_with_exact_opcode(...)` function.
-
 # ESP WEBSOCKET CLIENT
 
 [![Component Registry](https://components.espressif.com/components/espressif/esp_websocket_client/badge.svg)](https://components.espressif.com/components/espressif/esp_websocket_client)

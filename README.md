@@ -1,3 +1,11 @@
+# NOT an official version.
+
+## Difference to official version
+
+### `esp_websocket_client`
+
+- Exposes `esp_websocket_client_send_with_exact_opcode(...)` function.
+
 # Collection of protocol components for ESP-IDF
 
 ## How to use
